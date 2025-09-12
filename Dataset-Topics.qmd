@@ -4,18 +4,18 @@ title: Project Dataset and Topics
 output: html
 ---
 
-[Link to dataset]()
+[https://www.baseball-reference.com/teams/CHC/index.shtml]()
 
 Things you plan to investigate using this dataset:
 
-- Thing 1
-- Thing 2
-- Thing 3
+- Anlayzing Cubs Worst year vs thier best
+- Best hitter on 2016 World Series team
+- Cubs Stats from NL East compared to NL Central
 
 Stat 351 topics you plan to cover during the analysis:
 
-1. Topic 1
-2. Topic 2
-3. Topic 3
-4. Topic 4
+1. web scraping or API use
+2. list processing
+3. use of appropriate and well-chosen graphics
+4. functional programming
 
