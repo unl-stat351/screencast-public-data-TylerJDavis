@@ -1,6 +1,132 @@
 ---
-author: Your Name
-title: Screencast Pseudocode
-output: html
+title: "psuedocode"
+author: "Tyler Davis"
+format: html
+editor: visual
 ---
 
+```{r}
+
+library(rvest)
+library(httr2)
+library(tidyverse)
+
+#write a fuction to analyze a team data pitching and batting only!
+
+
+mlb_codes_table <- read_html("https://liaison.reuters.com/tools/sports-team-codes") %>%
+  html_table
+mlb_codes <- data.frame(mlb_codes_table[[54]])
+
+names(mlb_codes)[2] <- "MLB Team"
+names(mlb_codes)[1] <- "MLB Code"
+
+html <- read_html("https://www.baseball-reference.com/teams/CHC/index.shtml")
+
+tables <- html %>%
+  html_table()
+
+links <- html %>%
+  html_elements("a") %>%
+  html_attr("href")
+
+
+
+links_2016 <- links[str_detect(links,"2016")]
+
+cubs <- data.frame(tables[[1]])
+
+worse_year <- cubs %>%
+  filter( W.L. == min(W.L.))
+best_year <- cubs %>%
+  filter(W.L. >= .700)
+
+
+worse_year_recent <- cubs %>%
+  filter(Year > 1950) %>%
+  filter(W.L. <= .400)
+
+
+best_year_recent <- cubs %>%
+  filter(Year > 1950) %>%
+  filter(W.L. >=  .600)
+
+summary(cubs$W.L.)
+hist(cubs$W.L.)
+
+cubs$winning_catagory <- cut(cubs$W.L.,breaks = c(0,.4,.5,.6,1),labels = c("0-.4 Winning Percentage",".4-.5 Winning Percentage", ".5-.6 Winning Percentage",".6 and above Winning Percentage"))
+
+
+
+cubs$playoffs_app <- ifelse(grepl("\\S", cubs$Playoffs),1,0)
+cubs$
+
+seasons_winning <- cubs %>%
+  group_by(winning_catagory) %>%
+  summarise(counts = n(),play_count = sum(playoffs_app))
+
+NL_east <- cubs %>%
+  filter(Lg == "NL East")
+
+NL_central <- cubs %>%
+  filter(Lg == "NL Central")
+
+
+
+
+
+
+
+
+
+links <- html %>%
+  html_elements("a") %>%
+  html_attr("href")
+
+
+
+links_2016 <- links[str_detect(links,"2016")]
+
+
+url <- paste("https://www.baseball-reference.com/teams/CHC/","2016",".shtml", sep= "")
+
+team_dat <- read_html(url) %>%
+  html_element("#inpage_nav") %>%
+  html_elements("a")%>%
+  html_attr("href")
+
+
+names(team_dat) <- seq_along(team_dat)
+team_code <- data.frame(team_dat)
+
+data <- read_html("https://www.baseball-reference.com/teams/CHC/2016.shtml#all_players_standard_batting") %>%
+  html_table
+data_1 <- read_html(url) %>%
+  html_element("#div_players_standard_fielding") %>%
+  html_table
+```
+
+```{r}
+
+library(rvest)
+library(httr2)
+library(tidyverse)
+
+#write a fuction to analyze a team 
+
+
+mlb_codes_table <- read_html("https://liaison.reuters.com/tools/sports-team-codes") %>%
+  html_table
+mlb_codes <- data.frame(mlb_codes_table[[54]])
+
+names(mlb_codes)[2] <- "MLB Team"
+names(mlb_codes)[1] <- "MLB Code"
+
+
+
+#putting it into a function
+team_info <- function()
+  
+  
+# I want to create a function that take a team, team year, and info about team and the creats a data frame with that information
+```

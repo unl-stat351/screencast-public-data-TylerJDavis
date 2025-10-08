@@ -1,5 +1,5 @@
 ---
-author: Your Name
+author: Tyler Davis
 title: Project Dataset and Topics
 output: html
 ---
@@ -8,14 +8,13 @@ output: html
 
 Things you plan to investigate using this dataset:
 
-- Anlayzing Cubs Worst year vs thier best
-- Best hitter on 2016 World Series team
-- Cubs Stats from NL East compared to NL Central
+-   Anlayzing Cubs Worst year vs thier best
+-   Best hitter on 2016 World Series team
+-   Cubs Stats from NL East compared to NL Central
 
 Stat 351 topics you plan to cover during the analysis:
 
-1. web scraping or API use
-2. list processing
-3. use of appropriate and well-chosen graphics
-4. functional programming
-
+1.  web scraping or API use
+2.  list processing
+3.  use of appropriate and well-chosen graphics
+4.  functional programming
