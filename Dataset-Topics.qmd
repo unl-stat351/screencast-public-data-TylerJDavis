@@ -14,7 +14,23 @@ Things you plan to investigate using this dataset:
 
 Stat 351 topics you plan to cover during the analysis:
 
+<<<<<<< HEAD
 1.  web scraping or API use
 2.  list processing
 3.  use of appropriate and well-chosen graphics
 4.  functional programming
+=======
+1. web scraping or API use
+2. list processing
+3. use of appropriate and well-chosen graphics
+4. functional programming
+
+
+---
+
+Comments
+
+- what years? Define the parameters of your analysis a bit more precisely. 
+- "Worst vs. Best" by overall league performance? Win/loss record? what other measures are relevant?
+- Will you consider the best hitter on the 2016 team and their development over time? How will you examine/compare that data? What is the comparison population? What do you want to know?
+>>>>>>> ec66aa782efa2045cbfa8de70fa7206d4a4bdf23
