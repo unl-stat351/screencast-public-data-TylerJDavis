@@ -8,8 +8,10 @@ output: html
 
 Things you plan to investigate using this dataset:
 
--   Anlayzing Cubs Worst year vs thier best
+-   Analyzing Cubs Worst year vs their best
 -   Best hitter on 2016 World Series team
+  - writing a function to find hitting and pitching data
+  - writiing a function to find player data over time
 -   Cubs Stats from NL East compared to NL Central
 
 Stat 351 topics you plan to cover during the analysis:

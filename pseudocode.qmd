@@ -1,4 +1,5 @@
 ---
+url---
 title: "psuedocode"
 author: "Tyler Davis"
 format: html
@@ -59,7 +60,7 @@ cubs$winning_catagory <- cut(cubs$W.L.,breaks = c(0,.4,.5,.6,1),labels = c("0-.4
 
 
 cubs$playoffs_app <- ifelse(grepl("\\S", cubs$Playoffs),1,0)
-cubs$
+
 
 seasons_winning <- cubs %>%
   group_by(winning_catagory) %>%
@@ -94,6 +95,14 @@ team_dat <- read_html(url) %>%
   html_element("#inpage_nav") %>%
   html_elements("a")%>%
   html_attr("href")
+team_dat_1 <- read_html(url) %>%
+  html_table()
+table_1 <- team_dat_1[[1]]
+table_2 <- team_dat_1[[2]]
+table_3 <- team_dat_1[[3]]
+table_4 <- team_dat_1[[4]]
+
+
 
 
 names(team_dat) <- seq_along(team_dat)
@@ -115,18 +124,55 @@ library(tidyverse)
 #write a fuction to analyze a team 
 
 
-mlb_codes_table <- read_html("https://liaison.reuters.com/tools/sports-team-codes") %>%
+mlb_codes_table <- read_html("https://www.baseball-reference.com/about/team_IDs.shtml") %>%
   html_table
-mlb_codes <- data.frame(mlb_codes_table[[54]])
+mlb_codes <- mlb_codes_table[[1]]
+new_colnames <- mlb_codes[1,]
+colnames(mlb_codes) <- new_colnames
 
-names(mlb_codes)[2] <- "MLB Team"
-names(mlb_codes)[1] <- "MLB Code"
+mlb_codes_key <- mlb_codes[-1,-1]
 
 
 
 #putting it into a function
-team_info <- function()
+team_info <- function(Team_code,year,stat,season){
+  url <- paste("https://www.baseball-reference.com/teams/",Team_code,"/",year,".shtml", sep= "")
+
+  team_dat_1 <- read_html(url) %>%
+  html_table()
   
+  if(length(team_dat_1) == 4){
   
+  if(stat == "Hitting" && season == "Regular"){
+    data <- data.frame(team_dat_1[[1]])
+    return(data)
+  } else if(stat == "Hitting" && season == "Playoff"){
+    data <- data.frame(team_dat_1[[2]])
+    return(data)
+  } else if(stat == "Pitching" && season == "Regular"){
+    data <- data.frame(team_dat_1[[3]])
+    return(data)
+  } else if(stat == "Pitching" && season == "Playoff"){
+    data <- data.frame(team_dat_1[[4]])
+    return(data)
+  }
+    
+  } else if(length(team_dat_1) == 2){
+   if(season == "Playoff"){
+     return("Your Team did not make the playoffs this year")
+   } else if(stat == "Hitting"){
+     data <- data.frame(team_dat_1[[1]])
+     return(data)
+   }else if(stat == "Pitching"){
+     data <- data.frame(team_dat_1[[2]])
+     return(data)
+   }
+  } else{
+    return("You did not put your input in the right format. All inputs to this function must be string variables")
+  }
+}  
+  
+data <- team_info("MON","1970","Pitching","Regular")
+
 # I want to create a function that take a team, team year, and info about team and the creats a data frame with that information
 ```
