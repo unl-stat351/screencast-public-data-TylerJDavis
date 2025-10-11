@@ -13,12 +13,13 @@ Things you plan to investigate using this dataset:
   - writing a function to find hitting and pitching data
   - writiing a function to find player data over time
 -   Cubs Stats from NL East compared to NL Central
+- Map out MLB stadiums in interactive leaflet map
 
 Stat 351 topics you plan to cover during the analysis:
 
 <<<<<<< HEAD
 1.  web scraping or API use
-2.  list processing
+2.  interactive graphics
 3.  use of appropriate and well-chosen graphics
 4.  functional programming
 =======

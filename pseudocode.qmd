@@ -118,21 +118,51 @@ team_info <- function(Team_code,year,stat,season){
   }
 }  
   
-data <- team_info("MON","1970","Pitching","Regular")
+data <- team_info("CHC","2016","Hitting","Regular")
 
 
 ```
 
 ```{r}
+
 library(readr)
-player_codes <- read_csv("SFBB-Player-ID-Map(PLAYERIDMAP).csv")
-
-Players_Key <- player_codes[,1:2]
+sta_dat <- read_csv("Major_League_Baseball_Stadiums_(with_Placekey).csv")
 
 
 
+team_stadium <- function(team){
+library(leaflet)
+library(tidyverse)
+library(mlbplotR)
+team_info <- load_mlb_teams() %>%
+  filter(team_name == team) %>%
+  select(team_color,team_logo_espn)
+
+color <- team_info$team_color
+logo <- team_info$team_logo_espn
 
 
 
+sta_dat %>%
+  filter(TEAM == team) %>%
+  leaflet() %>%
+  addTiles %>%
+  addCircleMarkers(
+    lat = ~LATITUDE,
+    lng = ~LONGITUDE,
+    color = color,
+    fillColor = color,
+    fillOpacity = .8,
+    popup = ~paste0(
+      '<img src="',logo,'" style="width:150px;height:auto;">',"<br>",
+      "Stadium: ",NAME,"<br>",
+      "Capacity: ", CAPACITY)
+  )
+
+
+}
+
+
+team_stadium("Arizona Diamondbacks")
 
 ```
