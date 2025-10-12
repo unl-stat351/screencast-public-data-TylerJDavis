@@ -12,7 +12,6 @@ library(rvest)
 library(httr2)
 library(tidyverse)
 
-#write a fuction to analyze a team data pitching and batting only!
 
 
 html <- read_html("https://www.baseball-reference.com/teams/CHC/index.shtml")
@@ -24,40 +23,57 @@ tables <- html %>%
 cubs <- data.frame(tables[[1]])
 
 worse_year <- cubs %>%
-  filter( W.L. == min(W.L.))
+  filter( W.L. <= .450)
 best_year <- cubs %>%
-  filter(W.L. >= .700)
+  filter(W.L. >= .650)
+best_year$type <- "W.P. >= .650"
+worse_year$type <- "W.P. <= .450"
+years <- rbind(worse_year,best_year)
+
+cubs_years <- cubs %>%
+  filter(!Year %in% years$Year)
+
+cubs_years$type <- ".450 < W.P. < .650"
+cubs_total <- rbind(cubs_years,years)
+
+library(mlbplotR)
+colors <- load_mlb_teams() %>%
+  filter(team_name == "Chicago Cubs") %>%
+  select(team_color,team_color2)
+
+cubs_total %>%
+  ggplot(aes(x = Year,y = W.L.,fill = type)) + geom_col() +
+  scale_fill_manual( values = c(
+    "W.P. >= .650" = colors$team_color,
+    ".450 < W.P. < .650" = "gray",
+    "W.P. <= .450" = colors$team_color2)) + labs(
+      title = "Comparing Winning Percentages Across Years",
+      x = "Year",
+      y = "Winning Percentage",
+      fill = "Winning Catagory"
+    )
 
 
-worse_years_recent <- cubs %>%
-  filter(Year > 1950) %>%
-  filter(W.L. <= .400)
 
-
-best_years_recent <- cubs %>%
-  filter(Year > 1950) %>%
-  filter(W.L. >=  .600)
-
-summary(cubs$W.L.)
-hist(cubs$W.L.)
 
 cubs$winning_catagory <- cut(cubs$W.L.,breaks = c(0,.4,.5,.6,1),labels = c("0-.4 Winning Percentage",".4-.5 Winning Percentage", ".5-.6 Winning Percentage",".6 and above Winning Percentage"))
 
 
 
-cubs$playoffs_app <- ifelse(grepl("\\S", cubs$Playoffs),1,0)
+cubs$playoffs_app <- factor(ifelse(grepl("\\S", cubs$Playoffs),1,0))
 
 
 seasons_winning <- cubs %>%
   group_by(winning_catagory) %>%
-  summarise(counts = n(),play_count = sum(playoffs_app))
+  summarise(counts = n(),playoff_count = sum(playoffs_app))
 
-NL_east <- cubs %>%
-  filter(Lg == "NL East")
+library(knitr)
+kable(seasons_winning)
 
-NL_central <- cubs %>%
-  filter(Lg == "NL Central")
 
+ggplot(cubs,aes(x = Year,y = W.L.,fill = Lg)) + geom_col()
+
+ggplot(cubs,aes(x = Year,y = W.L.,fill = playoffs_app)) + geom_col()
 
 ```
 
@@ -120,7 +136,44 @@ team_info <- function(Team_code,year,stat,season){
   
 data <- team_info("CHC","2016","Hitting","Regular")
 
+data_clean <- data[c(1:8,10:21,23:47),]
 
+cols <- data.frame(colnames(data_clean))
+
+best_hitter_long <- data_clean %>%
+  pivot_longer(
+    cols = c(5:6,8:15,17:23),
+    names_to = "Metric",
+    values_to = "Score"
+  )
+  
+
+
+
+
+best_hitter <- best_hitter_long %>%
+  select(2:4,17:18) %>%
+  group_by(Metric) %>%
+  mutate(rank = case_when(
+    Metric == "SO" ~dense_rank(as.numeric(Score)),
+    TRUE ~dense_rank(desc(as.numeric(Score))))
+  )
+
+avg_rank <- best_hitter %>%
+  group_by(Player) %>%
+  summarise(rank_total = sum(rank),
+            mean_rank = mean(rank))%>%
+  arrange(rank_total,mean_rank)
+
+
+best_hitter %>%
+  filter(Player %in% avg_rank$Player[1:2]) %>%
+  ggplot(aes(x = Metric,y = rank, fill = Player)) + geom_col(position = "dodge") + labs(
+    title = "Comparing Ranks of the Two Best Hitters",
+    x = "Metric",
+    y = "Rank",
+    fill = "Player"
+  )
 ```
 
 ```{r}
@@ -163,6 +216,6 @@ sta_dat %>%
 }
 
 
-team_stadium("Arizona Diamondbacks")
+team_stadium("Oakland Athletics")
 
 ```
