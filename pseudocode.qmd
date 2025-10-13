@@ -60,20 +60,24 @@ cubs$winning_catagory <- cut(cubs$W.L.,breaks = c(0,.4,.5,.6,1),labels = c("0-.4
 
 
 
-cubs$playoffs_app <- factor(ifelse(grepl("\\S", cubs$Playoffs),1,0))
-
-
-seasons_winning <- cubs %>%
-  group_by(winning_catagory) %>%
-  summarise(counts = n(),playoff_count = sum(playoffs_app))
 
 library(knitr)
 kable(seasons_winning)
 
 
-ggplot(cubs,aes(x = Year,y = W.L.,fill = Lg)) + geom_col()
+ggplot(cubs,aes(x = Year,y = W.L.,fill = Lg)) + geom_col() + labs(
+  title = "Cubs Winning Percentage in Each Division",
+  x = "Year",
+  y = "WL Percentage",
+  fill = "Division"
+)
 
-ggplot(cubs,aes(x = Year,y = W.L.,fill = playoffs_app)) + geom_col()
+ggplot(cubs,aes(x = Year,y = W.L.,fill = factor(playoffs_app))) + geom_col() + labs(
+  title = "Cubs Playoff Appearances All Time",
+  x = "Year",
+  y = "W.L. Percentage",
+  fill = "Playoff Apperance"
+)
 
 ```
 
@@ -216,6 +220,6 @@ sta_dat %>%
 }
 
 
-team_stadium("Oakland Athletics")
+team_stadium("St. Louis Cardinals")
 
 ```
