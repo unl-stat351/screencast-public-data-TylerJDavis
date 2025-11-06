@@ -72,6 +72,9 @@ ggplot(cubs,aes(x = Year,y = W.L.,fill = Lg)) + geom_col() + labs(
   fill = "Division"
 )
 
+
+cubs$playoffs_app <- ifelse(str_detect(cubs$Playoffs,"o"),1,0)
+
 ggplot(cubs,aes(x = Year,y = W.L.,fill = factor(playoffs_app))) + geom_col() + labs(
   title = "Cubs Playoff Appearances All Time",
   x = "Year",
@@ -183,7 +186,8 @@ best_hitter %>%
 ```{r}
 
 library(readr)
-sta_dat <- read_csv("Major_League_Baseball_Stadiums_(with_Placekey).csv")
+sta_dat <- read_csv("Major_League_Baseball_Stadiums_(with_Placekey).csv") %>%
+  mutate(TEAM = ifelse(TEAM == "Cleveland Indians", "Cleveland Guardians", TEAM))
 
 
 
@@ -220,6 +224,27 @@ sta_dat %>%
 }
 
 
-team_stadium("St. Louis Cardinals")
+team_stadium("Cleveland Guardians")
 
+```
+
+```{r}
+library(shiny)
+library(tidyverse)
+library(shinydashboard)
+    
+ui <- fluidPage(
+        h1("MLB Team Stadiums"),
+        selectInput("team", "Select Team", sta_dat$TEAM),
+        leafletOutput("map", height = 600))
+
+server <- function(input, output){
+  
+  output$map <- renderLeaflet({
+    req(input$team)
+    team_stadium(input$team)
+  })
+}
+
+shinyApp(ui, server)
 ```
