@@ -24,7 +24,7 @@ The code written during this screencast is available [here](Screencast.qmd).
 ## Index of Techniques Used
 
 | Time | Technique |
-|------------------------------------|------------------------------------|
+|----|----|
 | 00:00 | Intro |
 | 02:00 | Topic 1 — Web Scraping using R libraries to scrape Baseball Reference pages |
 | 04:00 | Cleaning Cubs Baseball Reference data for graphing using tidyverse |
