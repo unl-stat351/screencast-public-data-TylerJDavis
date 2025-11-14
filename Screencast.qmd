@@ -1,46 +1,53 @@
 ---
-url---
-title: "psuedocode"
+title: "Screencast"
 author: "Tyler Davis"
 format: html
 editor: visual
 ---
 
-```{r}
+## Screen cast using Baseball Reference Data
 
+Reading in Data and analysis
+
+```{r}
 library(rvest)
 library(httr2)
 library(tidyverse)
-
-#Reading in data
 
 html <- read_html("https://www.baseball-reference.com/teams/CHC/index.shtml")
 
 tables <- html %>%
   html_table()
 
-
 cubs <- data.frame(tables[[1]])
 
 worse_year <- cubs %>%
-  filter( W.L. <= .450)
+  filter(W.L. <= .450)
 best_year <- cubs %>%
   filter(W.L. >= .650)
+
 best_year$type <- "W.P. >= .650"
 worse_year$type <- "W.P. <= .450"
+
 years <- rbind(worse_year,best_year)
 
 cubs_years <- cubs %>%
   filter(!Year %in% years$Year)
 
 cubs_years$type <- ".450 < W.P. < .650"
+
 cubs_total <- rbind(cubs_years,years)
 
 library(mlbplotR)
+
 colors <- load_mlb_teams() %>%
   filter(team_name == "Chicago Cubs") %>%
   select(team_color,team_color2)
+```
 
+Graphing Cubs Data
+
+```{r}
 cubs_total %>%
   ggplot(aes(x = Year,y = W.L.,fill = type)) + geom_col() +
   scale_fill_manual( values = c(
@@ -59,10 +66,6 @@ cubs_total %>%
 cubs$winning_catagory <- cut(cubs$W.L.,breaks = c(0,.4,.5,.6,1),labels = c("0-.4 Winning Percentage",".4-.5 Winning Percentage", ".5-.6 Winning Percentage",".6 and above Winning Percentage"))
 
 
-
-
-library(knitr)
-kable(seasons_winning)
 
 
 ggplot(cubs,aes(x = Year,y = W.L.,fill = Lg)) + geom_col() + labs(
@@ -84,22 +87,19 @@ ggplot(cubs,aes(x = Year,y = W.L.,fill = factor(playoffs_app))) + geom_col() + l
 
 ```
 
-```{r}
+Best hitter function
 
+```{r}
 library(rvest)
 library(httr2)
 library(tidyverse)
 
-#write a fuction to analyze a team 
-
-
 mlb_codes_table <- read_html("https://www.baseball-reference.com/about/team_IDs.shtml") %>%
-  html_table
-mlb_codes <- mlb_codes_table[[1]]
-new_colnames <- mlb_codes[1,]
-colnames(mlb_codes) <- new_colnames
-
-mlb_codes_key <- mlb_codes[-1,-1]
+  html_table()
+mlb_code <- mlb_codes_table[[1]]
+columns <- mlb_code[1,]
+colnames(mlb_code) <- columns
+mlb_key <- mlb_code[-1,c(2:5)]
 
 
 
@@ -184,8 +184,8 @@ best_hitter %>%
 ```
 
 ```{r}
-
 library(readr)
+library(tidyverse)
 sta_dat <- read_csv("Major_League_Baseball_Stadiums_(with_Placekey).csv") %>%
   mutate(TEAM = ifelse(TEAM == "Cleveland Indians", "Cleveland Guardians", TEAM))
 
@@ -224,27 +224,27 @@ sta_dat %>%
 }
 
 
-team_stadium("Cleveland Guardians")
+team_stadium("Chicago Cubs")
 
-```
 
-```{r}
+
+#Shiney App
 library(shiny)
 library(tidyverse)
 library(shinydashboard)
-    
-ui <- fluidPage(
-        h1("MLB Team Stadiums"),
-        selectInput("team", "Select Team", sta_dat$TEAM),
-        leafletOutput("map", height = 600))
 
-server <- function(input, output){
-  
+ui <- fluidPage(
+  h1("MLB Team Stadium"),
+  selectInput("team","Select Team",sta_dat$TEAM),
+  leafletOutput("map",height = 600)
+)
+
+server <- function(input,output){
   output$map <- renderLeaflet({
     req(input$team)
     team_stadium(input$team)
   })
 }
 
-shinyApp(ui, server)
+shinyApp(ui,server)
 ```
