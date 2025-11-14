@@ -1,5 +1,22 @@
 # STAT 351 Screencast
 
+Tyler Davis
+
+This screen cast is a midterm project for STAT 351. The overall topic of my screen cast is analyzing baseball data using techniques learned in 351.
+
+Topics completed:
+
+1.  Web scraping
+2.  Appropriate graphics
+3.  Functional programming
+4.  Interactive graphics
+
+Problems solved
+
+1.  Scraping and Analyzing Cubs winning history.
+2.  Developing a function to pull data for a team, under certain characteristics, then using this data to find the best hitter on the team.
+3.  Creating a interactive graphic and app to display baseball stadium data.
+
 Link to video: <https://www.youtube.com/watch?v=5v8ofQEo9Dg>
 
 The code written during this screencast is available [here](Screencast.qmd).
@@ -7,7 +24,7 @@ The code written during this screencast is available [here](Screencast.qmd).
 ## Index of Techniques Used
 
 | Time | Technique |
-|----|----|
+|------------------------------------|------------------------------------|
 | 00:00 | Intro |
 | 02:00 | Topic 1 — Web Scraping using R libraries to scrape Baseball Reference pages |
 | 04:00 | Cleaning Cubs Baseball Reference data for graphing using tidyverse |
