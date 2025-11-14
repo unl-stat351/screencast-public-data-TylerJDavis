@@ -1,5 +1,4 @@
 ---
-url---
 title: "psuedocode"
 author: "Tyler Davis"
 format: html
@@ -61,8 +60,6 @@ cubs$winning_catagory <- cut(cubs$W.L.,breaks = c(0,.4,.5,.6,1),labels = c("0-.4
 
 
 
-library(knitr)
-kable(seasons_winning)
 
 
 ggplot(cubs,aes(x = Year,y = W.L.,fill = Lg)) + geom_col() + labs(
